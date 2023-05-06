@@ -33,12 +33,14 @@ public class JwtResponse {
     }
 
     public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles, String img) {
+
         this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
         this.imageProfile=img;
+
 
     }
 

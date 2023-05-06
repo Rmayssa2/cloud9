@@ -1,5 +1,13 @@
 package com.pi.tobeeb.Services;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.Serializable;
 
 import com.pi.tobeeb.Entities.User;
@@ -34,8 +42,9 @@ public class EmailService implements IUserEmailRepository {
         user.setVerificationToken(verificationTokenService.generateVerificationToken());
         message.setSubject("Vérification du compte");
         message.setText("Bonjour " + user.getUsername() + ",\n\n" +
-                "Veuillez cliquerr sur le lien ci-dessouus pour activer votre compte :\n\n" +
-                "http://localhost:4200/activate?token=" + user.getVerificationToken());
+            
+                "Veuillez cliquer sur le lien ci-dessous pour activer votre compte :\n\n" +
+                "http://localhost:8075/activate?token=" + user.getVerificationToken());
 
         userMailSender.send(message);
     }
@@ -44,13 +53,18 @@ public class EmailService implements IUserEmailRepository {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("tobeeb2023@gmail.com");
         simpleMailMessage.setTo(mail.getTo());
-        simpleMailMessage.setSubject("Code Active!!");
+        simpleMailMessage.setSubject("Code Active");
         simpleMailMessage.setText("Hello This code will let you change your forget password");
         simpleMailMessage.setText(mail.getCode());
         userMailSender.send(simpleMailMessage);
     }
 
-
-
-
+    public void sendConfirmationEmail(String recipientEmail) throws MessagingException {
+        MimeMessage message = userMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(recipientEmail);
+        helper.setSubject("Confirmation de rendez-vous");
+        helper.setText("Votre rendez-vous  a été ajouté avec succès.");
+        javaMailSender.send(message);
+}
 }

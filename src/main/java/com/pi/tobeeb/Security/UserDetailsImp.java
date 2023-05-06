@@ -83,6 +83,7 @@ public class UserDetailsImp implements UserDetails {
         return user.getRoles().toString();
   }
 
+
     @Override
     public String getUsername() {
         // TODO Auto-generated method stub

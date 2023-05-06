@@ -6,16 +6,17 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Data
+
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
@@ -164,6 +165,10 @@ private String HourForWorkingStart;
 
  @Column(name = "lock_time")
  private Date lockTime;
+ private String picture;
+ private String verificationToken;
+ private int isverified;
+ private String userCode;
 
  public String getUserCode() {
   return userCode;
@@ -192,6 +197,7 @@ private String HourForWorkingStart;
  public void setLockTime(Date lockTime) {
   this.lockTime = lockTime;
  }
+
 
  public void setUserCode(String userCode) {
   this.userCode = userCode;
@@ -271,4 +277,96 @@ private String HourForWorkingStart;
  public void setIsverified(int isverified) {
   this.isverified = isverified;
  }
+ @JsonIgnore
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
+ private Set<Appointment> appointmentP;
+ @JsonIgnore
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="doctor")
+ private Set<Appointment> appointmentD;
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
+ private Set<Reclamation> reclamation;
+
+ @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser1 = new HashSet<>();
+
+ @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser2 = new HashSet<>();
+
+ 
+ public User(String username, String email, String password) {
+  this.username = username;
+  this.email = email;
+  this.password = password;
+ }
+ public Long getId() {
+  return idUser;
+ }
+
+ public void setId(long id) {
+  this.idUser = id;
+ }
+
+ public String getUsername() {
+  return username;
+ }
+
+ public void setUsername(String username) {
+  this.username = username;
+ }
+
+ public String getEmail() {
+  return email;
+ }
+
+ public void setEmail(String email) {
+  this.email = email;
+ }
+
+ public String getPassword() {
+  return password;
+ }
+
+ public void setPassword(String password) {
+  this.password = password;
+ }
+
+ public Set<Role> getRoles() {
+  return role;
+ }
+
+ public void setRoles(Set<Role> roles) {
+  this.role = roles;
+ }
+
+ public String getVerificationToken() {
+  return verificationToken;
+ }
+
+ public void setVerificationToken(String verificationToken) {
+  this.verificationToken = verificationToken;
+ }
+
+ public int getIsverified() {
+  return isverified;
+ }
+
+ public void setIsverified(int isverified) {
+  this.isverified = isverified;
+ }
+
+public Long getIdUser() {
+	return idUser;
+}
+
+public void setIdUser(Long idUser) {
+	this.idUser = idUser;
+}
+
+public User() {
+	super();
+}
+
 }

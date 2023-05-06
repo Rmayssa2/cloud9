@@ -6,6 +6,8 @@ import com.pi.tobeeb.Entities.ResetToken;
 import com.pi.tobeeb.Entities.Role;
 import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Payload.request.ChangePasswordRequest;
+import com.pi.tobeeb.Entities.ResetToken;
+import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Payload.request.SmsNewPwd;
 import com.pi.tobeeb.Payload.request.SmsRest;
 import com.pi.tobeeb.Payload.response.MessageResponse;
@@ -16,6 +18,9 @@ import com.pi.tobeeb.Utils.CodeUtils;
 import com.pi.tobeeb.Utils.SmsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.pi.tobeeb.Repositorys.UserRepository;
+import com.pi.tobeeb.Utils.CodeUtils;
+import com.pi.tobeeb.Utils.SmsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -44,6 +50,7 @@ public class UserService {
     public static final int MAX_FAILED_ATTEMPTS = 3;
 
     private static final long LOCK_TIME_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+public class UserService {
     @Autowired
     private UserRepository repoUser;
     @Autowired
@@ -52,6 +59,7 @@ public class UserService {
     private RoleRepository roleDao;
 
     @Autowired
+
     private ResetTokenRepository ResettokenRepo;
     @Autowired
     private SmsConfig smsService;
@@ -80,6 +88,7 @@ public class UserService {
         role4.setName(ERole.ROLE_ADMIN);
         roleDao.save(role4);
     }
+    private UserRepository userRepository;
 
     @Autowired
     private VerificationTokenService verificationTokenService;
@@ -254,8 +263,7 @@ public List <User> GetByRole(String role){
         return repoUser.findAll();
     }
 
-
-
-
-
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).get();
+    }
 }

@@ -25,4 +25,12 @@ public class UserMail {
     public void setCode(String code) {
         this.code = code;
     }
+
+
+	public UserMail(String to, String code) {
+		super();
+		this.to = to;
+		this.code = code;
+	}
+    
 }

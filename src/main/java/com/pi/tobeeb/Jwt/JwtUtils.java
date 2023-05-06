@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
+import java.util.Date;
 
 @Component
 public class JwtUtils {
@@ -24,17 +26,28 @@ public class JwtUtils {
 
 
     private int jwtExpirationMs = 86400000;
+
+    private String jwtSecret="bezKoderSecretKey";
+    byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
+
+
+    private int jwtExpirationMs = 3600 * 5;
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImp userPrincipal = (UserDetailsImp) authentication.getPrincipal();
 
-         ;
+
         return Jwts.builder()
                 .claim("roles",userPrincipal.getAuthorities().toString())
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, getSignInKey())
+        return Jwts.builder()
+                .setSubject((userPrincipal.getUsername()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, keyBytes)
                 .compact();
     }
 
@@ -45,6 +58,7 @@ public class JwtUtils {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
