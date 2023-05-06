@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-//@AllArgsConstructor
+
+@AllArgsConstructor
+
 public class UserMail {
     private String to;
     private String code;
@@ -26,10 +28,4 @@ public class UserMail {
         this.code = code;
     }
 
-	public UserMail(String to, String code) {
-		super();
-		this.to = to;
-		this.code = code;
-	}
-    
 }

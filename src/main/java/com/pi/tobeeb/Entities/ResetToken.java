@@ -26,6 +26,7 @@ public class ResetToken {
     @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
+
 	public Long getId() {
 		return id;
 	}
@@ -59,4 +60,5 @@ public class ResetToken {
 	}
     
     
+
 }
