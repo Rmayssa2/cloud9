@@ -12,6 +12,7 @@ public class TwilioConfig {
     private String account_sid;
     private String auth_token;
     private String sender_number;
+
 	public String getAccount_sid() {
 		return account_sid;
 	}
@@ -30,6 +31,4 @@ public class TwilioConfig {
 	public void setSender_number(String sender_number) {
 		this.sender_number = sender_number;
 	}
-
-    
 }

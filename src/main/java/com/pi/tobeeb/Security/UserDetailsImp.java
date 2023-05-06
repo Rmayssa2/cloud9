@@ -79,6 +79,9 @@ public class UserDetailsImp implements UserDetails {
         return user.getPassword();
     }
 
+  public String getRole(){
+        return user.getRoles().toString();
+  }
 
 
     @Override

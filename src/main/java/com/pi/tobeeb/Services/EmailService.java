@@ -1,5 +1,6 @@
 package com.pi.tobeeb.Services;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import java.io.Serializable;
 
 import com.pi.tobeeb.Entities.User;
@@ -42,6 +42,7 @@ public class EmailService implements IUserEmailRepository {
         user.setVerificationToken(verificationTokenService.generateVerificationToken());
         message.setSubject("Vérification du compte");
         message.setText("Bonjour " + user.getUsername() + ",\n\n" +
+            
                 "Veuillez cliquer sur le lien ci-dessous pour activer votre compte :\n\n" +
                 "http://localhost:8075/activate?token=" + user.getVerificationToken());
 
@@ -57,6 +58,7 @@ public class EmailService implements IUserEmailRepository {
         simpleMailMessage.setText(mail.getCode());
         userMailSender.send(simpleMailMessage);
     }
+
     public void sendConfirmationEmail(String recipientEmail) throws MessagingException {
         MimeMessage message = userMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-//@AllArgsConstructor
+@AllArgsConstructor
 public class UserMail {
     private String to;
     private String code;
@@ -25,6 +25,7 @@ public class UserMail {
     public void setCode(String code) {
         this.code = code;
     }
+
 
 	public UserMail(String to, String code) {
 		super();

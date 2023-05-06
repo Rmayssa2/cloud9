@@ -28,6 +28,7 @@ public class UserVerificationToken implements Serializable {
     private LocalDateTime expiryDate;
 
 
+
 	public Long getId() {
 		return id;
 	}

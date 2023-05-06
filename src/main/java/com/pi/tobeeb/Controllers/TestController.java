@@ -22,7 +22,6 @@ public class TestController {
     @PreAuthorize("hasRole('ROLE_PATIENT')")
     public String userAccess() {
         logger.error("iiiiiicccjjjciiiiiiiiii");
-
         return "Patient Content.";
     }
 
