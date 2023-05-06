@@ -1,5 +1,13 @@
 package com.pi.tobeeb.Services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import java.io.Serializable;
 
 import com.pi.tobeeb.Entities.User;
@@ -49,8 +57,12 @@ public class EmailService implements IUserEmailRepository {
         simpleMailMessage.setText(mail.getCode());
         userMailSender.send(simpleMailMessage);
     }
-
-
-
-
+    public void sendConfirmationEmail(String recipientEmail) throws MessagingException {
+        MimeMessage message = userMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(recipientEmail);
+        helper.setSubject("Confirmation de rendez-vous");
+        helper.setText("Votre rendez-vous  a été ajouté avec succès.");
+        javaMailSender.send(message);
+}
 }
