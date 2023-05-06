@@ -5,16 +5,23 @@ import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Interfaces.AppointmentInterface;
 import com.pi.tobeeb.Repositorys.AppointmentRepo;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class AppointmentService implements AppointmentInterface {
+@Slf4j
 
+public class AppointmentService implements AppointmentInterface {
+    @Autowired
+    private JavaMailSender javaMailSender;
     AppointmentRepo appointmentRepo;
 
     @Override
@@ -24,7 +31,7 @@ public class AppointmentService implements AppointmentInterface {
 
     @Override
     public Appointment addAppointment(Appointment appointment) {
-        LocalDate dateStart = appointment.getDateStart();
+        LocalDateTime dateStart = appointment.getDateStart();
         List<Appointment> appointmentsOnDate = appointmentRepo.findBydateStart(dateStart);
 
         if (appointmentsOnDate.isEmpty()) {
@@ -38,8 +45,8 @@ public class AppointmentService implements AppointmentInterface {
 
     @Override
     public Appointment updateAppointment(Appointment appointment) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate reservationDate = appointment.getDateStart();
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime reservationDate = appointment.getDateStart();
 
         if (reservationDate.isBefore(currentDate.plusDays(1))) {
             throw new IllegalArgumentException("Reservations can only be updated one day before the current date");
@@ -60,17 +67,36 @@ public class AppointmentService implements AppointmentInterface {
     public void removeAppointment(Appointment abonnement) {
         appointmentRepo.delete(abonnement);
     }
+    @Override
+    public void removeAppointmentById(int id) {
+        appointmentRepo.deleteById(id);
+    }
 
     @Override
     public Appointment retrieveAppointment(int idAppointment) {
         return appointmentRepo.findById(idAppointment).get();
     }
 
+
+
     public List<Appointment> findAppointmentsByUser(User user) {
         return appointmentRepo.findByPatient(user);
     }
 
     public List<Appointment> findAppointmentsByDoctor(User user) {
-        return appointmentRepo.findByPatient(user);
+        return appointmentRepo.findByDoctor(user);
+    }
+@Override
+   // @Scheduled(cron = "*/30 * * * * *") // execute every 30 seconds
+    public String sendEmail() {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo("rafed.benjeddou@esprit.tn");
+            message.setSubject("Test e-mail");
+            message.setText("This is a test e-mail from my Spring Boot application.");
+            javaMailSender.send(message);
+            System.out.println("E-mail sent successfully.");
+            //log.info("mail");
+            return "E-mail sent successfully.";
+
     }
 }
